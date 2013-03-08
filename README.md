@@ -20,3 +20,9 @@ Example
     , removeClasses: [['.selector', 'classes-to-remove when-entering']]
     })
     .begin('firstState');
+
+You can also see a working demo at https://rawgithub.com/wheeyls/flocus/master/index.html
+
+Bookmarklet
+-----------
+Flocus comes with a bookmarklet that creates an overlay to help to visualize and navigate through the different states on the page.

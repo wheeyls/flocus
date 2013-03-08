@@ -3,6 +3,10 @@
   <head>
     <title>Flocus Testing</title>
     <style>
+      .all-states {
+        margin: 200px 0;
+      }
+
       .hidden {
         display: none;
       }
@@ -30,10 +34,14 @@
     </script>
   </head>
   <body>
-    <div class="js-state-1 hidden">Page 1</div>
-    <div class="js-state-2 hidden">Page 2</div>
-    <div class="js-state-3 hidden">Page 3</div>
-    <div class="js-next-state">Next</div>
-    <div class="js-previous-state">Previous</div>
+    <div class="all-states">
+      <div class="js-state-1 hidden">Page 1</div>
+      <div class="js-state-2 hidden">Page 2</div>
+      <div class="js-state-3 hidden">Page 3</div>
+      <div class="js-next-state">Next</div>
+      <div class="js-previous-state">Previous</div>
+
+      <a href="javascript:(function() { var s = document.createElement('script'); s.src = 'bookmarklet.js'; document.body.appendChild(s); }());">Bookmarklet</a>
+    </div>
   </body>
 </html>

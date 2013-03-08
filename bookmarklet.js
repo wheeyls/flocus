@@ -1,7 +1,7 @@
-javascript:(function (window, document) {
+(function (window, document) {
 var nodeName,
     elements = {},
-    template = "<div class='tjstate-node' id='%s' style='overflow: auto;'>\
+    template = "<div class='flocus-node' id='%s' style='overflow: auto;'>\
     <div style='width: 30%; float: left; box-sizing: border-box; padding: 2px;'>%s</div>\
     <div style='width: 30%; float: left; box-sizing: border-box; padding: 2px;'>%s</div>\
     <div style='width: 30%; float: left; box-sizing: border-box; padding: 2px;'>%s</div>\
@@ -23,7 +23,7 @@ var nodeName,
       el.innerHTML = sprintf(template, 'state-' + name, prev, name, next);
       el = el.firstChild;
       el.addEventListener('click', function () {
-          tjStates.setState(name);
+          flocus.setState(name);
       }, false);
       return el;
   }
@@ -50,8 +50,8 @@ var rootEl = document.createElement('div');
 rootEl.innerHTML = sprintf(rootTemp);
 rootEl = rootEl.firstChild;
 
-for (nodeName in tjStates.states) {
-    elements[nodeName] = elements[nodeName] || createNode(nodeName, tjStates.states[nodeName]);
+for (nodeName in flocus.states) {
+    elements[nodeName] = elements[nodeName] || createNode(nodeName, flocus.states[nodeName]);
     rootEl.appendChild(elements[nodeName]);
 }
 
@@ -59,10 +59,10 @@ buildStyle();
 document.body.appendChild(rootEl);
 
 if (typeof $ === 'function') {
-  $(window).on('tjm-state-change', function (ev, state) {
+  $(window).on('js-state-change', function (ev, state) {
     $('.current').removeClass('current');
     $('#state-'+state).addClass('current');
   });
-  $('#state-'+tjStates.getState()).addClass('current');
+  $('#state-'+flocus.getState()).addClass('current');
 }
 }(this.window, this.document));
