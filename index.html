@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flocus Testing</title>
+    <style>
+      .hidden {
+        display: none;
+      }
+    </style>
+    <script src="lib/zepto.js"></script>
+    <script src="flocus.js"></script>
+    <script>
+      $(document).ready(function () {
+        flocus
+        .add('one', {
+          next: 'two'
+        , removeClasses: [['.js-state-1', 'hidden']]
+        })
+        .add('two', {
+          next: 'three'
+        , previous: 'one'
+        , removeClasses: [['.js-state-2', 'hidden']]
+        })
+        .add('three', {
+          previous: 'two'
+        , removeClasses: [['.js-state-3', 'hidden']]
+        })
+        .begin('one');
+      });
+    </script>
+  </head>
+  <body>
+    <div class="js-state-1 hidden">Page 1</div>
+    <div class="js-state-2 hidden">Page 2</div>
+    <div class="js-state-3 hidden">Page 3</div>
+    <div class="js-next-state">Next</div>
+    <div class="js-previous-state">Previous</div>
+  </body>
+</html>
