@@ -35,12 +35,14 @@
     function withjQuery(args, action) {
       if (!args || !action) { return; }
 
-      args.forEach(function (val) {
-        var rest = val.slice(1),
-          $el = $(val[0]);
+      var i, ii, rest, $el;
+
+      for (i = 0, ii = args.length; i < ii; i++) {
+        rest = args[i].slice(1);
+        $el = $(args[i][0]);
 
         $el[action].apply($el, rest);
-      });
+      }
     }
 
     function leave(state) {
@@ -66,6 +68,10 @@
     }
 
     function attachListeners() {
+      var directions = ['next', 'previous']
+        , i
+        ;
+
       $(window).on('js-state-change', function (ev, currState, prevState) {
         var current = states[currState],
             previous = states[prevState];
@@ -74,10 +80,17 @@
         enter(current);
       });
 
-      ['next', 'previous'].forEach(function (direction) {
+      function traverseHelper(direction) {
         $('.js-' + direction + '-state').on('click', function () {
           !$(this).attr('disabled') && traverse(direction);
         });
+      }
+
+      for (i = 0; i < directions.length; i++) {
+        traverseHelper(directions[i]);
+      }
+
+      ['next', 'previous'].forEach(function (direction) {
       });
 
       $('.js-set-state').on('click', function () {

@@ -23,6 +23,18 @@ Example
 
 You can also see a working demo at https://rawgithub.com/wheeyls/flocus/master/index.html
 
+Next & Previous
+---------------
+Flocus looks for the classes .js-next-state and .js-previous-state on begin, and will bind the next and previous commands to the click on these elements. This allows an easy way to move through the different states.
+
+Begin
+-----
+Calling ```flocus.begin('stateName')``` will kick everything into motion, entering the given state, and activate all listeners.
+
+The value passed into begin will be overridden by the query string, if there are any parameters in the form of:
+
+    ?state=stateName
+
 Bookmarklet
 -----------
 Flocus comes with a bookmarklet that creates an overlay to help to visualize and navigate through the different states on the page.
