@@ -8,15 +8,15 @@ Simply give each state a name and describe their setup and teardown behavior, an
 
 Example
 -------
-flocus
-.add('firstState', {
-  next: 'secondState'
-, addClasses: [['.selector', 'classes-to-add when-entering']]
-, removeClasses: [['.selector', 'classes-to-remove when-entering']]
-})
-.add('secondState', {
-  previous: 'firstState'
-, addClasses: [['.selector', 'classes-to-add when-entering']]
-, removeClasses: [['.selector', 'classes-to-remove when-entering']]
-})
-.begin('firstState');
+    flocus
+    .add('firstState', {
+      next: 'secondState'
+    , addClasses: [['.selector', 'classes-to-add when-entering']]
+    , removeClasses: [['.selector', 'classes-to-remove when-entering']]
+    })
+    .add('secondState', {
+      previous: 'firstState'
+    , addClasses: [['.selector', 'classes-to-add when-entering']]
+    , removeClasses: [['.selector', 'classes-to-remove when-entering']]
+    })
+    .begin('firstState');
