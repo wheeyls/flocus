@@ -2,24 +2,26 @@ Flocus
 ------
 Flocus is a simple state-management plugin for a web page.
 
+It was originally designed to build a step-by-step wizard. It is also pretty good at rapidly mocking up interfaces.
+
 The chainable API allows you to describe a number of different states that the page will transition between.
 
-Simply give each state a name and describe their setup and teardown behavior, and then you can get started. The steps can be linked to eachother through their "next" and "previous" properties.
+Give each state a name and describe their setup and teardown behavior. The steps can be linked to eachother through their "next" and "previous" properties.
 
 Example
 -------
     flocus
-    .add('firstState', {
-      next: 'secondState'
+    .add('loggedOut', {
+      next: 'loggedIn'
     , addClasses: [['.selector', 'classes-to-add when-entering']]
     , removeClasses: [['.selector', 'classes-to-remove when-entering']]
     })
-    .add('secondState', {
-      previous: 'firstState'
+    .add('loggedIn', {
+      previous: 'loggedOut'
     , addClasses: [['.selector', 'classes-to-add when-entering']]
     , removeClasses: [['.selector', 'classes-to-remove when-entering']]
     })
-    .begin('firstState');
+    .begin('loggedOut');
 
 You can also see a working demo at https://rawgithub.com/wheeyls/flocus/master/index.html
 
