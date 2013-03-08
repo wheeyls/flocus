@@ -23,18 +23,26 @@ Example
 
 You can also see a working demo at https://rawgithub.com/wheeyls/flocus/master/index.html
 
-Next & Previous
----------------
+Changing State
+--------------
+Calling ```flocus.next()``` and ```flocus.previous()``` will crawl through the states in order.
+
+Calling ```flocus.setState('stateName')``` sets the state directly.
+
 Flocus looks for the classes .js-next-state and .js-previous-state on begin, and will bind the next and previous commands to the click on these elements. This allows an easy way to move through the different states.
+
+Changing the state will trigger the custom event ```'flocus:state-change'```.
 
 Begin
 -----
-Calling ```flocus.begin('stateName')``` will kick everything into motion, entering the given state, and activate all listeners.
+Calling ```flocus.begin('stateName')``` will kick everything into motion, entering the given state, and activating all listeners.
 
-The value passed into begin will be overridden by the query string, if there are any parameters in the form of:
-
-    ?state=stateName
+The value passed into begin will be overridden by the query string, if there are any parameters in the form of: ```?state=stateName```.
 
 Bookmarklet
 -----------
 Flocus comes with a bookmarklet that creates an overlay to help to visualize and navigate through the different states on the page.
+
+jQuery/Zepto/ender?
+-------------------
+Yep.

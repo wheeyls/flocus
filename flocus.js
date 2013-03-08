@@ -28,7 +28,7 @@
       pageState = newState;
 
       if (pageState !== previousState) {
-        $(window).trigger('js-state-change', [pageState, previousState]);
+        $(window).trigger('flocus:state-change', [pageState, previousState]);
       }
     }
 
@@ -72,7 +72,7 @@
         , i
         ;
 
-      $(window).on('js-state-change', function (ev, currState, prevState) {
+      $(window).on('flocus:state-change', function (ev, currState, prevState) {
         var current = states[currState],
             previous = states[prevState];
 
@@ -89,9 +89,6 @@
       for (i = 0; i < directions.length; i++) {
         traverseHelper(directions[i]);
       }
-
-      ['next', 'previous'].forEach(function (direction) {
-      });
 
       $('.js-set-state').on('click', function () {
         var hrefVal = $(this).attr('href');

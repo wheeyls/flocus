@@ -59,7 +59,7 @@ buildStyle();
 document.body.appendChild(rootEl);
 
 if (typeof $ === 'function') {
-  $(window).on('js-state-change', function (ev, state) {
+  $(window).on('flocus:state-change', function (ev, state) {
     $('.current').removeClass('current');
     $('#state-'+state).addClass('current');
   });
