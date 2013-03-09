@@ -39,8 +39,6 @@ Begin
 -----
 Calling ```flocus.begin('stateName')``` will kick everything into motion, entering the given state, and activating all listeners.
 
-The value passed into begin will be overridden by the query string, if there are any parameters in the form of: ```?state=stateName```.
-
 Bookmarklet
 -----------
 Flocus comes with a bookmarklet that creates an overlay to help to visualize and navigate through the different states on the page.

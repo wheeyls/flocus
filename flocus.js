@@ -1,34 +1,24 @@
 (function (window, document, $) {
   "use strict";
 
-  var stateManager = function () {
-    var pageState,
-        states = {},
-        listenersAttached;
+  var allManagers = []
+    , stateManager
+    ;
 
-
-    function parseSearch(queryKey) {
-      var rawString = window.location.search.substring(1),
-          vars = rawString.split('&'),
-          i, ii,
-          result = {};
-
-      for (i = 0, ii = vars.length; i < ii; i++) {
-        vars[i].replace(/([\s\S]+)=([\s\S]+)/, function (pattern, key, val) {
-          key && val && (result[key] = val);
-        });
-      }
-
-      queryKey && (result = result[queryKey]);
-      return result;
-    }
+  stateManager = function (root) {
+    var pageState
+      , states = {}
+      , listenersAttached
+      , $root = $(root || 'body')
+      , me
+      ;
 
     function updateState(newState) {
       var previousState = pageState;
       pageState = newState;
 
       if (pageState !== previousState) {
-        $(window).trigger('flocus:state-change', [pageState, previousState]);
+        $root.trigger('flocus:state-change', [pageState, previousState]);
       }
     }
 
@@ -72,7 +62,7 @@
         , i
         ;
 
-      $(window).on('flocus:state-change', function (ev, currState, prevState) {
+      $root.on('flocus:state-change', function (ev, currState, prevState) {
         var current = states[currState],
             previous = states[prevState];
 
@@ -81,7 +71,7 @@
       });
 
       function traverseHelper(direction) {
-        $('.js-' + direction + '-state').on('click', function () {
+        $('.js-' + direction + '-state', $root).on('click', function () {
           !$(this).attr('disabled') && traverse(direction);
         });
       }
@@ -90,7 +80,7 @@
         traverseHelper(directions[i]);
       }
 
-      $('.js-set-state').on('click', function () {
+      $('.js-set-state', $root).on('click', function () {
         var hrefVal = $(this).attr('href');
         hrefVal.charAt(0) === "#" && (hrefVal = hrefVal.slice(1));
 
@@ -105,41 +95,32 @@
       newState && updateState(newState);
     }
 
-    // setup listeners, check for current state in address bar
     function begin(initialState) {
-      var s;
-
       !listenersAttached && attachListeners();
-
-      s = parseSearch('state') || initialState;
-      updateState(s);
+      updateState(initialState);
     }
 
-    return {
-      states: states,
-      getState: function () {
-        return pageState;
-      },
-      setState: function (newState) {
-        updateState(newState);
-      },
-      next: function () {
-        traverse('next');
-      },
-      previous: function () {
-        traverse('previous');
-      },
-      traverse: traverse,
-      add: function (name, newState, previous, next) {
+    me = {
+      states: states
+    , $root: $root
+    , getState: function () { return pageState; }
+    , traverse: traverse
+    , next: function () { traverse('next'); }
+    , previous: function () { traverse('previous'); }
+    , setState: function (newState) { updateState(newState); }
+    , add: function (name, newState, previous, next) {
         next && (newState.next = next);
         previous && (newState.previous = previous);
         states[name] = newState;
         return this;
-      },
-      begin: begin,
-      fn: {}
+      }
+    , begin: begin
     };
+
+    allManagers.push(me);
+    return me;
   };
 
-  window.flocus = stateManager();
+  stateManager.all = allManagers;
+  window.flocus = stateManager;
 }(this, this.document, this.jQuery || this.Zepto || this.ender));

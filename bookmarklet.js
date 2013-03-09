@@ -1,5 +1,6 @@
 (function (window, document) {
 var nodeName,
+    i, ii,
     elements = {},
     template = "<div class='flocus-node' id='%s' style='overflow: auto;'>\
     <div style='width: 30%; float: left; box-sizing: border-box; padding: 2px;'>%s</div>\
@@ -16,14 +17,16 @@ var nodeName,
     });
   }
 
-  function createNode(name, node) {
+  function createNode(name, node, flo, index) {
       var el = document.createElement('div'),
           next = node.next || '',
           prev = node.previous || '';
-      el.innerHTML = sprintf(template, 'state-' + name, prev, name, next);
+      el.innerHTML = sprintf(template,
+                             sprintf('state-%s-%s', name, i),
+                             prev, name, next);
       el = el.firstChild;
       el.addEventListener('click', function () {
-          flocus.setState(name);
+        flo.setState(name);
       }, false);
       return el;
   }
@@ -46,23 +49,30 @@ var rootTemp = "<div id='state-bookmarklet-root' style='opacity: .8; position: f
     <div style='clear:both'> </div>\
 </div>\
 ";
-var rootEl = document.createElement('div');
+var rootEl = document.createElement('div')
+  , flo
+  ;
+
 rootEl.innerHTML = sprintf(rootTemp);
 rootEl = rootEl.firstChild;
-
-for (nodeName in flocus.states) {
-    elements[nodeName] = elements[nodeName] || createNode(nodeName, flocus.states[nodeName]);
-    rootEl.appendChild(elements[nodeName]);
-}
 
 buildStyle();
 document.body.appendChild(rootEl);
 
-if (typeof $ === 'function') {
-  $(window).on('flocus:state-change', function (ev, state) {
-    $('.current').removeClass('current');
-    $('#state-'+state).addClass('current');
-  });
-  $('#state-'+flocus.getState()).addClass('current');
+for (i = 0, ii = flocus.all.length; i < ii; i++) {
+  (function (flo, i) {
+    for (nodeName in flo.states) {
+        elements[nodeName] = elements[nodeName] || createNode(nodeName, flo.states[nodeName], flo, i);
+        rootEl.appendChild(elements[nodeName]);
+    }
+
+    flo.$root.on('flocus:state-change', function (ev, state, prev) {
+      $(sprintf('#state-%s-%s', prev, i)).removeClass('current');
+      $(sprintf('#state-%s-%s', state, i)).addClass('current');
+    });
+
+    $(sprintf('#state-%s-%s', flo.getState(), i)).addClass('current');
+  }(flocus.all[i], i));
 }
+
 }(this.window, this.document));

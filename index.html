@@ -15,7 +15,7 @@
     <script src="flocus.js"></script>
     <script>
       $(document).ready(function () {
-        flocus
+        var page = flocus('.page-states')
         .add('one', {
           next: 'two'
         , removeClasses: [['.js-state-1', 'hidden']]
@@ -29,19 +29,38 @@
           previous: 'two'
         , removeClasses: [['.js-state-3', 'hidden']]
         })
-        .begin('one');
+        , log = flocus('.login-states')
+        .add('loggedOut', {
+          next: 'loggedIn'
+        , previous: 'loggedIn'
+        , removeClasses: [['.logged-out', 'hidden']]
+        })
+        .add('loggedIn', {
+          previous: 'loggedOut'
+        , next: 'loggedOut'
+        , removeClasses: [['.logged-in', 'hidden']]
+        });
+
+        page.begin('one');
+        log.begin('loggedOut');
       });
     </script>
   </head>
   <body>
     <div class="all-states">
-      <div class="js-state-1 hidden">Page 1</div>
-      <div class="js-state-2 hidden">Page 2</div>
-      <div class="js-state-3 hidden">Page 3</div>
-      <div class="js-next-state">Next</div>
-      <div class="js-previous-state">Previous</div>
+      <div class='login-states'>
+        <div class='logged-out js-next-state hidden'>Log In!</div>
+        <div class='logged-in js-next-state hidden'>Log Out!</div>
+      </div>
+      <div class="page-states">
+        <div class="js-state-1 hidden">Page 1</div>
+        <div class="js-state-2 hidden">Page 2</div>
+        <div class="js-state-3 hidden">Page 3</div>
+        <div class="js-next-state">Next Page</div>
+        <div class="js-previous-state">Previous Page</div>
 
-      <a href="javascript:(function() { var s = document.createElement('script'); s.src = 'bookmarklet.js'; document.body.appendChild(s); }());">Bookmarklet</a>
+        <a href="javascript:(function() { var s = document.createElement('script'); s.src = 'bookmarklet.js'; document.body.appendChild(s); }());">Bookmarklet</a>      </div>
+      </div>
     </div>
   </body>
 </html>
