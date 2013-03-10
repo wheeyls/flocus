@@ -3,6 +3,7 @@
 
   var allManagers = []
     , stateManager
+    , old
     ;
 
   stateManager = function (root) {
@@ -70,14 +71,14 @@
         enter(current);
       });
 
-      function traverseHelper(direction) {
+      function performHelper(direction) {
         $('.js-' + direction + '-state', $root).on('click', function () {
-          !$(this).attr('disabled') && traverse(direction);
+          !$(this).attr('disabled') && perform(direction);
         });
       }
 
       for (i = 0; i < directions.length; i++) {
-        traverseHelper(directions[i]);
+        performHelper(directions[i]);
       }
 
       $('.js-set-state', $root).on('click', function () {
@@ -90,9 +91,12 @@
       listenersAttached = true;
     }
 
-    function traverse(direction) {
-      var newState = states[pageState] && states[pageState][direction];
-      newState && updateState(newState);
+    function perform(eventName) {
+      var curr = states[pageState]
+        , next = curr && curr.events[eventName]
+        ;
+
+      next && updateState(next);
     }
 
     function begin(initialState) {
@@ -100,18 +104,32 @@
       updateState(initialState);
     }
 
+    function state(opts, name, previous, next) {
+      var theState = $.extend({
+        name: name
+      , enter: function () {}
+      , leave: function () {}
+      }, opts);
+
+      theState.events = $.extend({
+        next: next
+      , previous: previous
+      }, theState.events);
+
+      return theState;
+    }
+
+
     me = {
       states: states
     , $root: $root
     , getState: function () { return pageState; }
-    , traverse: traverse
-    , next: function () { traverse('next'); }
-    , previous: function () { traverse('previous'); }
+    , perform: perform
+    , next: function () { perform('next'); }
+    , previous: function () { perform('previous'); }
     , setState: function (newState) { updateState(newState); }
     , add: function (name, newState, previous, next) {
-        next && (newState.next = next);
-        previous && (newState.previous = previous);
-        states[name] = newState;
+        states[name] = state(newState, name, previous, next);
         return this;
       }
     , begin: begin
@@ -122,5 +140,12 @@
   };
 
   stateManager.all = allManagers;
+
+  old = window.flocus;
+  stateManager.noConflict = function () {
+    window.flocus = old;
+    return stateManager;
+  };
+
   window.flocus = stateManager;
 }(this, this.document, this.jQuery || this.Zepto || this.ender));

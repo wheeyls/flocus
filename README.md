@@ -1,25 +1,32 @@
 Flocus
 ------
-Flocus is a simple state-management plugin for a web page.
+Flocus is a simple state-machine with hooks for building web interactions.
 
 It was originally designed to build a step-by-step wizard. It is also pretty good at rapidly mocking up interfaces.
 
 The chainable API allows you to describe a number of different states that the page will transition between.
 
-Give each state a name and describe their setup and teardown behavior. The steps can be linked to eachother through their "next" and "previous" properties.
+Give each state a name and describe their setup and teardown behavior. Then create events that transition between the diffent states.
+There are some built in shortcuts around the "next" and "previous" events.
 
 Example
 -------
     flocus
     .add('loggedOut', {
-      next: 'loggedIn'
+      events: {
+        login: 'loggedIn'
+      }
     , addClasses: [['.selector', 'classes-to-add when-entering']]
     , removeClasses: [['.selector', 'classes-to-remove when-entering']]
+    , enter: function () { /* run when entering this state */ }
     })
     .add('loggedIn', {
-      previous: 'loggedOut'
+      events: {
+        logout: 'loggedOut'
+      }
     , addClasses: [['.selector', 'classes-to-add when-entering']]
     , removeClasses: [['.selector', 'classes-to-remove when-entering']]
+    , leave: function () { /* run when leaving this state */ }
     })
     .begin('loggedOut');
 
@@ -29,11 +36,15 @@ Changing State
 --------------
 Calling ```flocus.next()``` and ```flocus.previous()``` will crawl through the states in order.
 
-Calling ```flocus.setState('stateName')``` sets the state directly.
+Calling ```flocus.perform('eventName')``` will change state based on the named event.
 
-Flocus looks for the classes .js-next-state and .js-previous-state on begin, and will bind the next and previous commands to the click on these elements. This allows an easy way to move through the different states.
+Calling ```flocus.setState('stateName')``` can be used to force the state directly.
 
 Changing the state will trigger the custom event ```'flocus:state-change'```.
+
+Next and Previous
+-----------------
+Flocus looks for the classes .js-next-state and .js-previous-state on begin, and will bind the next and previous events to the click on these elements. This allows an easy way to move through the different states.
 
 Begin
 -----

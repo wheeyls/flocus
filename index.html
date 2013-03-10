@@ -10,6 +10,15 @@
       .hidden {
         display: none;
       }
+
+      .left {
+        float: left;
+        margin: 0 3px 0 0px;
+      }
+
+      .container {
+        overflow: auto;
+      }
     </style>
     <script src="lib/zepto.js"></script>
     <script src="flocus.js"></script>
@@ -17,27 +26,39 @@
       $(document).ready(function () {
         var page = flocus('.page-states')
         .add('one', {
-          next: 'two'
+          events: {
+            next: 'two'
+          }
         , removeClasses: [['.js-state-1', 'hidden']]
+        , addClasses: [['.page-states .js-previous-state', 'hidden']]
         })
         .add('two', {
-          next: 'three'
-        , previous: 'one'
+          events: {
+            next: 'three'
+          , previous: 'one'
+          }
         , removeClasses: [['.js-state-2', 'hidden']]
         })
         .add('three', {
-          previous: 'two'
+          events: {
+            previous: 'two'
+          }
         , removeClasses: [['.js-state-3', 'hidden']]
+        , addClasses: [['.page-states .js-next-state', 'hidden']]
         })
         , log = flocus('.login-states')
         .add('loggedOut', {
-          next: 'loggedIn'
-        , previous: 'loggedIn'
+          events: {
+            next: 'loggedIn'
+          , previous: 'loggedIn'
+          }
         , removeClasses: [['.logged-out', 'hidden']]
         })
         .add('loggedIn', {
-          previous: 'loggedOut'
-        , next: 'loggedOut'
+          events: {
+            previous: 'loggedOut'
+          , next: 'loggedOut'
+          }
         , removeClasses: [['.logged-in', 'hidden']]
         });
 
@@ -56,8 +77,10 @@
         <div class="js-state-1 hidden">Page 1</div>
         <div class="js-state-2 hidden">Page 2</div>
         <div class="js-state-3 hidden">Page 3</div>
-        <div class="js-next-state">Next Page</div>
-        <div class="js-previous-state">Previous Page</div>
+        <div class="container">
+          <div class="js-previous-state left">Previous Page</div>
+          <div class="js-next-state left">Next Page</div>
+        </div>
 
         <a href="javascript:(function() { var s = document.createElement('script'); s.src = 'bookmarklet.js'; document.body.appendChild(s); }());">Bookmarklet</a>      </div>
       </div>
